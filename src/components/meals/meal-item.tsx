@@ -22,7 +22,12 @@ export default function MealItem({
     <article className={classes.meal}>
       <header>
         <div className={classes.image}>
-          <Image src={image} alt={title} fill />
+          <Image
+            src={image}
+            alt={title}
+            fill
+            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+          />
         </div>
         <div className={classes.headerText}>
           <h2>{title}</h2>
