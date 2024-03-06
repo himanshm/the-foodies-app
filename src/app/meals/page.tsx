@@ -3,21 +3,11 @@ import Link from 'next/link';
 import styles from './page.module.css';
 import MealsGrid from '@/components/meals/meals.grid';
 import { getMeals } from '../../../lib/meals';
-
-type Meals = {
-  id: string;
-  slug: string;
-  title: string;
-  image: string;
-  summary: string;
-  instructions: string;
-  creator: string;
-  creator_email: string;
-};
+import { MealsType } from '../../../lib/meals';
 
 async function Meals() {
   const mealsData = await getMeals();
-  const meals: Meals[] = mealsData as Meals[];
+  const meals: MealsType[] = mealsData as MealsType[];
 
   return <MealsGrid meals={meals} />;
 }
