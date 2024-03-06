@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import Link from 'next/link';
 import styles from './page.module.css';
 import MealsGrid from '@/components/meals/meals.grid';
@@ -14,9 +15,14 @@ type Meals = {
   creator_email: string;
 };
 
-export default async function MealsPage() {
+async function Meals() {
   const mealsData = await getMeals();
   const meals: Meals[] = mealsData as Meals[];
+
+  return <MealsGrid meals={meals} />;
+}
+
+export default function MealsPage() {
   return (
     <>
       <header className={styles.header}>
@@ -32,7 +38,9 @@ export default async function MealsPage() {
         </p>
       </header>
       <main>
-        <MealsGrid meals={meals} />
+        <Suspense fallback={<p className={styles.loading}>Fetcing Meals...</p>}>
+          <Meals />
+        </Suspense>
       </main>
     </>
   );
