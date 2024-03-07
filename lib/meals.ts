@@ -1,4 +1,6 @@
 import sql from 'better-sqlite3';
+import slugify from 'slugify';
+import xss from 'xss';
 
 export type MealsType = {
   id: string;
@@ -31,4 +33,9 @@ export function getMeal(slug: string): MealsType | undefined {
     return mealData as MealsType; // Type assertion
   }
   return undefined;
+}
+
+export function saveMeal(meal: MealsType) {
+  meal.slug = slugify(meal.title, { lower: true });
+  meal.instructions = xss(meal.instructions);
 }
