@@ -4,10 +4,15 @@ import styles from './page.module.css';
 import MealsGrid from '@/components/meals/meals.grid';
 import { getMeals } from '../../../lib/meals';
 import { MealsType } from '../../../lib/meals';
+import { notFound } from 'next/navigation';
 
 async function Meals() {
   const mealsData = await getMeals();
-  const meals: MealsType[] = mealsData as MealsType[];
+  const meals: MealsType[] | undefined = mealsData;
+
+  if (!meals) {
+    notFound();
+  }
 
   return <MealsGrid meals={meals} />;
 }

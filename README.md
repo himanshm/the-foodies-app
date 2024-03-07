@@ -1,36 +1,25 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+### Suspense
 
-## Getting Started
+Suspense is a component provided by React that allows you to handle loading states and show fallback content until some data or resource has been loaded.
 
-First, run the development server:
+NextJS embraces this suspense component and this React concept, and makes sure that whenever you have a component the one, which performs some data fetching and returns such a promise, that such components will trigger suspense to show the fallback until they're done.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+So you don't need to do anything else. You just have to set up the fallback prop on this suspense component and find the fallback content that should be shown whilst that wrapped component is loading some data.
+
 ```
+async function Meals() {
+  const mealsData = await getMeals();
+  const meals: MealsType[] | undefined = mealsData;
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+  if (!meals) {
+    notFound();
+  }
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+  return <MealsGrid meals={meals} />;
+}
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+<Suspense fallback={<p className={styles.loading}>Fetcing Meals...</p>}>
+    <Meals />
+</Suspense>
+```

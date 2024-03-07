@@ -13,9 +13,15 @@ export type MealsType = {
 
 const db = sql('meals.db');
 
-export async function getMeals() {
+export async function getMeals(): Promise<MealsType[] | undefined> {
   await new Promise((resolve) => setTimeout(resolve, 2000)); // Adding extra delay
-  return db.prepare('SELECT * FROM meals').all();
+  const mealsData = db.prepare('SELECT * FROM meals').all();
+
+  if (mealsData) {
+    return mealsData as MealsType[];
+  }
+
+  return undefined;
 }
 
 export function getMeal(slug: string): MealsType | undefined {
