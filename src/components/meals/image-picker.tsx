@@ -28,6 +28,7 @@ function ImagePicker({ label, name }: ImagePickerProps) {
 
     const file = event.target.files[0];
 
+    // Show preview of image
     const fileReader = new FileReader();
     fileReader.onload = () => {
       setPickedImage(fileReader.result as string);
@@ -46,6 +47,7 @@ function ImagePicker({ label, name }: ImagePickerProps) {
               src={pickedImage}
               alt='The image selected by the user'
               fill
+              sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
             />
           )}
         </div>
