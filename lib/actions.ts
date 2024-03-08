@@ -1,23 +1,12 @@
 'use server';
 
 import { redirect } from 'next/navigation';
-// async function shareMeal(formData: FormData) {
-//   const meal = {
-//     title: formData.get('title'),
-//     summary: formData.get('summary'),
-//     instructions: formData.get('instructions'),
-//     image: formData.get('image'),
-//     creator: formData.get('name'),
-//     creator_email: formData.get('email'),
-//   };
-
-//   console.log(meal);
-// }
-
-// export default shareMeal;
 
 import { saveMeal } from './meals';
-import slugify from 'slugify';
+
+function isInvalidText(text: string) {
+  return !text || text.trim() === '';
+}
 
 async function shareMeal(formData: FormData) {
   const title = formData.get('title') as string;
@@ -27,10 +16,7 @@ async function shareMeal(formData: FormData) {
   const creator = formData.get('name') as string;
   const creator_email = formData.get('email') as string;
 
-  // const slug = slugify(title, { lower: true });
-
   const meal = {
-    // slug: slug,
     title: title,
     summary: summary,
     instructions: instructions,
@@ -39,7 +25,18 @@ async function shareMeal(formData: FormData) {
     creator_email: creator_email,
   };
 
-  // console.log(meal);
+  if (
+    isInvalidText(meal.title) ||
+    isInvalidText(meal.summary) ||
+    isInvalidText(meal.instructions) ||
+    isInvalidText(meal.creator) ||
+    isInvalidText(meal.creator_email) ||
+    !meal.creator_email.includes('@') ||
+    !meal.image ||
+    meal.image.size === 0
+  ) {
+    throw new Error('Invalid Input!');
+  }
   await saveMeal(meal);
   redirect('/meals');
 }
