@@ -4,6 +4,22 @@ import { getMeal } from '../../../../lib/meals';
 import { type MealsType } from '../../../../lib/meals';
 import { notFound } from 'next/navigation';
 
+export async function generateMetadata({
+  params,
+}: {
+  params: { mealSlug: string };
+}) {
+  const meal: MealsType | undefined = getMeal(params.mealSlug);
+
+  if (!meal) {
+    notFound();
+  }
+  return {
+    title: meal.title,
+    description: meal.summary,
+  };
+}
+
 function MealDetailsPage({ params }: { params: { mealSlug: string } }) {
   const meal: MealsType | undefined = getMeal(params.mealSlug);
 

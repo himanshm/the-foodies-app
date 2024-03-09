@@ -6,6 +6,11 @@ import { getMeals } from '../../../lib/meals';
 import { MealsType } from '../../../lib/meals';
 import { notFound } from 'next/navigation';
 
+export const metadata = {
+  title: 'All Meals',
+  description: 'Browse the delicious meals shared by our vibrant community',
+};
+
 async function Meals() {
   const mealsData = await getMeals();
   const meals: MealsType[] | undefined = mealsData;
