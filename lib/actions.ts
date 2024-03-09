@@ -3,12 +3,13 @@
 import { redirect } from 'next/navigation';
 
 import { saveMeal } from './meals';
+import { revalidatePath } from 'next/cache';
 
 function isInvalidText(text: string) {
   return !text || text.trim() === '';
 }
 
-async function shareMeal(formData: FormData) {
+async function shareMeal(state: { message: string }, formData: FormData) {
   const title = formData.get('title') as string;
   const summary = formData.get('summary') as string;
   const instructions = formData.get('instructions') as string;
@@ -35,9 +36,13 @@ async function shareMeal(formData: FormData) {
     !meal.image ||
     meal.image.size === 0
   ) {
-    throw new Error('Invalid Input!');
+    return {
+      message: 'Invalid Input!',
+    };
   }
   await saveMeal(meal);
+  return { message: 'Meal shared successfully!' };
+  revalidatePath('/meals');
   redirect('/meals');
 }
 
